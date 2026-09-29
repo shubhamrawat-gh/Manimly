@@ -26,3 +26,16 @@ target/
 .cargo-tools/
 
 rust-migration-notes.md
+
+# Next.js
+.next/
+*.tsbuildinfo
+
+# Local project storage
+projects/*.json
+!projects/.gitkeep
+
+# Internal development specs
+PRD.md
+AI_CONTEXT.md
+ARCHITECTURE_AUDIT.md

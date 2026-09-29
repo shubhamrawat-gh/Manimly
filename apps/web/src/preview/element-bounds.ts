@@ -122,7 +122,11 @@ function getElementBounds({
 
 	const { width: canvasWidth, height: canvasHeight } = canvasSize;
 
-	if (element.type === "video" || element.type === "image") {
+	if (
+		element.type === "video" ||
+		element.type === "image" ||
+		element.type === "manim"
+	) {
 		const transform = resolveTransformAtTime({
 			baseTransform: buildTransformFromParams({ params: element.params }),
 			animations: element.animations,

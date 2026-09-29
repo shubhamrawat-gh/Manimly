@@ -46,14 +46,19 @@ export class DefinitionRegistry<TKey extends string, TDefinition> {
 		this.entityName = entityName;
 	}
 
-	register({
-		key,
-		definition,
-	}: {
-		key: TKey;
-		definition: TDefinition;
-	}): void {
-		this.definitions.set(key, definition);
+	register(
+		keyOrOptions: TKey | { key: TKey; definition: TDefinition },
+		maybeDefinition?: TDefinition,
+	): void {
+		if (
+			typeof keyOrOptions === "object" &&
+			keyOrOptions !== null &&
+			"key" in keyOrOptions
+		) {
+			this.definitions.set(keyOrOptions.key, keyOrOptions.definition);
+		} else if (maybeDefinition !== undefined) {
+			this.definitions.set(keyOrOptions as TKey, maybeDefinition);
+		}
 	}
 
 	has(key: TKey): boolean {
@@ -350,6 +355,7 @@ elementParamRegistry.register({
 });
 elementParamRegistry.register({ key: "audio", definition: audioElementParams });
 elementParamRegistry.register({ key: "effect", definition: [] });
+elementParamRegistry.register({ key: "manim", definition: visualElementParams });
 
 export function getElementParams({
 	element,

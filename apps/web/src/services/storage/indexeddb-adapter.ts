@@ -5,18 +5,26 @@ export class IndexedDBAdapter<T> implements StorageAdapter<T> {
 	private storeName: string;
 	private version: number;
 
-	constructor({
-		dbName,
-		storeName,
+	constructor(
+		optionsOrDbName:
+			| string
+			| {
+					dbName: string;
+					storeName: string;
+					version?: number;
+			  },
+		storeName?: string,
 		version = 1,
-	}: {
-		dbName: string;
-		storeName: string;
-		version?: number;
-	}) {
-		this.dbName = dbName;
-		this.storeName = storeName;
-		this.version = version;
+	) {
+		if (typeof optionsOrDbName === "string") {
+			this.dbName = optionsOrDbName;
+			this.storeName = storeName ?? "default";
+			this.version = version;
+		} else {
+			this.dbName = optionsOrDbName.dbName;
+			this.storeName = optionsOrDbName.storeName;
+			this.version = optionsOrDbName.version ?? 1;
+		}
 	}
 
 	private async getDB(): Promise<IDBDatabase> {
@@ -47,13 +55,12 @@ export class IndexedDBAdapter<T> implements StorageAdapter<T> {
 		});
 	}
 
-	async set({
-		key,
-		value,
-	}: {
-		key: string;
-		value: T;
-	}): Promise<void> {
+	async set(
+		keyOrArgs: string | { key: string; value: T },
+		maybeValue?: T,
+	): Promise<void> {
+		const key = typeof keyOrArgs === "string" ? keyOrArgs : keyOrArgs.key;
+		const value = typeof keyOrArgs === "string" ? (maybeValue as T) : keyOrArgs.value;
 		const db = await this.getDB();
 		const transaction = db.transaction([this.storeName], "readwrite");
 		const store = transaction.objectStore(this.storeName);

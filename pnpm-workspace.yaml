@@ -1,0 +1,13 @@
+packages:
+  - "apps/*"
+
+allowBuilds:
+  onnxruntime-node: true
+  protobufjs: true
+  sharp: true
+
+onlyBuiltDependencies:
+  - onnxruntime-node
+  - protobufjs
+  - sharp
+  - "@tailwindcss/oxide"

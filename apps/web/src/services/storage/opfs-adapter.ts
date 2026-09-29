@@ -27,13 +27,12 @@ export class OPFSAdapter implements StorageAdapter<File> {
 		}
 	}
 
-	async set({
-		key,
-		value: file,
-	}: {
-		key: string;
-		value: File;
-	}): Promise<void> {
+	async set(
+		keyOrArgs: string | { key: string; value: File },
+		maybeValue?: File,
+	): Promise<void> {
+		const key = typeof keyOrArgs === "string" ? keyOrArgs : keyOrArgs.key;
+		const file = typeof keyOrArgs === "string" ? (maybeValue as File) : keyOrArgs.value;
 		const directory = await this.getDirectory();
 		const fileHandle = await directory.getFileHandle(key, { create: true });
 		const writable = await fileHandle.createWritable();

@@ -28,13 +28,13 @@ export function Onboarding() {
 	const getStepTitle = () => {
 		switch (step) {
 			case 0:
-				return "Welcome to OpenCut Beta! 🎉";
+				return "Welcome to Manimly! 🎉";
 			case 1:
-				return "⚠️ This is a super early beta!";
+				return "⚠️ Early Preview";
 			case 2:
-				return "🦋 Have fun testing!";
+				return "🦋 Have fun animating!";
 			default:
-				return "OpenCut Onboarding";
+				return "Manimly Onboarding";
 		}
 	};
 
@@ -44,8 +44,8 @@ export function Onboarding() {
 				return (
 					<div className="space-y-5">
 						<div className="space-y-3">
-							<Title title="Welcome to OpenCut Beta! 🎉" />
-							<Description description="You're among the first to try OpenCut - the fully open source CapCut alternative." />
+							<Title title="Welcome to Manimly! 🎉" />
+							<Description description="You're among the first to try Manimly - the local-first prompt-to-animation video editor." />
 						</div>
 						<NextButton onClick={handleNext}>Next</NextButton>
 					</div>
@@ -55,9 +55,8 @@ export function Onboarding() {
 					<div className="space-y-5">
 						<div className="space-y-3">
 							<Title title={getStepTitle()} />
-							<Description description="There's still a ton of things to do to make this editor amazing." />
-							<Description description="A lot of features are still missing. We're working hard to build them out!" />
-							<Description description="If you're curious, check out our roadmap [here](https://opencut.app/roadmap)" />
+							<Description description="Manimly combines timeline video editing with AI-generated Manim scenes." />
+							<Description description="Configure your local Manim render daemon in settings to generate animations directly on your timeline." />
 						</div>
 						<NextButton onClick={handleNext}>Next</NextButton>
 					</div>
@@ -68,7 +67,7 @@ export function Onboarding() {
 						<div className="space-y-3">
 							<Title title={getStepTitle()} />
 							<Description
-								description={`Join our [Discord](${SOCIAL_LINKS.discord}), chat with cool people and share feedback to help make OpenCut the best editor ever.`}
+								description={`Join our community, chat with creators, and share feedback to help make Manimly the best animation editor.`}
 							/>
 						</div>
 						<NextButton onClick={handleClose}>Finish</NextButton>

@@ -52,19 +52,13 @@ export function MobileGate({ children }: MobileGateProps) {
 						Desktop only (for now)
 					</h1>
 					<p className="text-muted-foreground text-sm leading-relaxed">
-						OpenCut isn't optimized for mobile or iPad yet. Things will break
+						Manimly isn't optimized for mobile or iPad yet. Things will break
 						and the layout will be a mess. Come back on a desktop for the real
 						experience.
 					</p>
 				</div>
 				<div className="flex items-center gap-3">
 					<Button onClick={handleContinue}>Take a look anyway</Button>
-					<Button variant="ghost" asChild>
-						<Link href="/roadmap" className="flex items-center gap-1">
-							Roadmap
-							<HugeiconsIcon icon={ArrowRight01Icon} size={14} />
-						</Link>
-					</Button>
 				</div>
 			</div>
 		</div>

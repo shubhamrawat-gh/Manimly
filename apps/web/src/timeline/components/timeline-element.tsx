@@ -39,6 +39,7 @@ import type {
 	VideoElement,
 	ImageElement,
 	AudioElement,
+	ManimClip,
 } from "@/timeline";
 import type { MediaAsset } from "@/media/types";
 import { mediaSupportsAudio } from "@/media/media-utils";
@@ -1163,6 +1164,71 @@ function MediaElementHeader({
 	);
 }
 
+function ManimElementContent({
+	element,
+	track,
+}: {
+	element: ManimClip;
+	track: TimelineTrack;
+}) {
+	if (element.renderStatus === "failed") {
+		return (
+			<div className="flex h-full w-full items-center justify-between px-2 bg-destructive/15 border border-destructive/30 rounded-xs select-none">
+				<div className="flex items-center gap-1.5 overflow-hidden">
+					<span className="inline-block size-2 shrink-0 rounded-full bg-destructive animate-pulse" />
+					<span className="text-destructive font-medium truncate text-xs">
+						{element.prompt ? `Failed: ${element.prompt}` : "Render Failed"}
+					</span>
+				</div>
+				<span className="text-[10px] text-destructive uppercase shrink-0 font-mono font-medium">
+					error
+				</span>
+			</div>
+		);
+	}
+
+	if (
+		!element.videoAssetRef ||
+		element.renderStatus === "pending" ||
+		element.renderStatus === "rendering" ||
+		element.renderStatus === "idle"
+	) {
+		return (
+			<div className="flex h-full w-full items-center justify-between px-2 bg-primary/20 border border-primary/30 rounded-xs select-none">
+				<div className="flex items-center gap-1.5 overflow-hidden">
+					<span className="inline-block size-2 shrink-0 rounded-full bg-primary animate-pulse" />
+					<span className="text-foreground/90 font-medium truncate text-xs">
+						{element.prompt ? `Manim: ${element.prompt}` : "Manim Scene (pending)"}
+					</span>
+				</div>
+				<span className="text-[10px] text-primary uppercase shrink-0 font-mono font-medium">
+					{element.renderStatus || "pending"}
+				</span>
+			</div>
+		);
+	}
+
+	const trackHeight = getTrackHeight({ type: track.type });
+	const tileWidth = trackHeight * THUMBNAIL_ASPECT_RATIO;
+
+	return (
+		<div className="relative flex h-full w-full items-center bg-black/10 overflow-hidden group">
+			<Image
+				src={element.videoAssetRef}
+				alt={element.prompt || "Manim clip"}
+				width={tileWidth}
+				height={trackHeight}
+				className="h-full w-auto object-cover"
+				unoptimized
+			/>
+			<div className="absolute right-1 top-1 z-10 rounded-xs bg-black/70 px-1 py-0.2 text-[9px] font-mono font-semibold text-primary backdrop-blur-xs">
+				MANIM
+			</div>
+			<MediaElementHeader name={element.prompt || "Manim Scene"} hasFade />
+		</div>
+	);
+}
+
 function ElementContent({ element, track }: ElementContentProps) {
 	switch (element.type) {
 		case "text":
@@ -1178,6 +1244,8 @@ function ElementContent({ element, track }: ElementContentProps) {
 		case "video":
 		case "image":
 			return <TiledMediaContent element={element} track={track} />;
+		case "manim":
+			return <ManimElementContent element={element} track={track} />;
 	}
 }
 

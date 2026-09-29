@@ -1,14 +1,15 @@
 import type { NextConfig } from "next";
-import { withBotId } from "botid/next/config";
-import { withContentCollections } from "@content-collections/next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
+	turbopack: {
+		root: path.resolve(__dirname, "../.."),
+	},
 	compiler: {
 		removeConsole: process.env.NODE_ENV === "production",
 	},
 	reactStrictMode: true,
 	productionBrowserSourceMaps: true,
-	output: "standalone",
 	images: {
 		remotePatterns: [
 			{
@@ -18,14 +19,6 @@ const nextConfig: NextConfig = {
 			{
 				protocol: "https",
 				hostname: "images.unsplash.com",
-			},
-			{
-				protocol: "https",
-				hostname: "images.marblecms.com",
-			},
-			{
-				protocol: "https",
-				hostname: "lh3.googleusercontent.com",
 			},
 			{
 				protocol: "https",
@@ -43,12 +36,8 @@ const nextConfig: NextConfig = {
 				protocol: "https",
 				hostname: "api.unisvg.com",
 			},
-			{
-				protocol: "https",
-				hostname: "cdn.brandfetch.io",
-			},
 		],
 	},
 };
 
-export default withContentCollections(withBotId(nextConfig));
+export default nextConfig;

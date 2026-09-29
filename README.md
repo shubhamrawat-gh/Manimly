@@ -1,162 +1,136 @@
-# OpenCut (Legacy)
+<div align="center">
 
-This is the original OpenCut codebase. It's archived and no longer maintained.
+# Manimly
 
-The rewrite is happening at [opencut-app/opencut](https://github.com/opencut-app/opencut).
+### Interactive AI Studio for Mathematical Animations
 
-## Sponsors
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Rust](https://img.shields.io/badge/Rust-WASM-DEA584?logo=rust)](https://www.rust-lang.org/)
 
-Thanks to [Vercel](https://vercel.com?utm_source=github-opencut&utm_campaign=oss) and [fal.ai](https://fal.ai?utm_source=github-opencut&utm_campaign=oss) for their support of open-source software.
+**Manimly** is a local-first video editor and authoring studio designed specifically for mathematical animations. By treating Manim scenes as first-class timeline clips, Manimly bridges the gap between natural language animation prompts, Python source code, and a multi-track editing timeline.
 
-<a href="https://vercel.com/oss">
-  <img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge.svg" />
-</a>
+</div>
 
-<a href="https://fal.ai">
-  <img alt="Powered by fal.ai" src="https://img.shields.io/badge/Powered%20by-fal.ai-000000?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCAxMEwxMy4wOSAxNS43NEwxMiAyMkwxMC45MSAxNS43NEw0IDEwTDEwLjkxIDguMjZMMTIgMloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" />
-</a>
+---
 
-## Why?
+## Highlights
 
-- **Privacy**: Your videos stay on your device
-- **Free features**: Most basic CapCut features are now paywalled 
-- **Simple**: People want editors that are easy to use - CapCut proved that
+- **Prompt-to-Animation Studio**: Generate mathematical scenes directly from natural language or customize ready-to-use math presets.
+- **First-Class Manim Clips**: Manim animations sit directly on a multi-track timeline alongside standard video, audio, text, and image tracks.
+- **Live Code Inspector & Rollback**: Inspect and fine-tune generated Manim Python code with an integrated editor, full version history, and one-click rollback.
+- **Mathematical Presets**: Instant starter scenes for Fourier Series, Neural Networks, Riemann Sums, Lorenz Attractors, Calculus Limits, and Linear Transformations.
+- **Local-First & Private**: Everything stays on your machine. Projects persist locally as clean JSON files without external database or cloud account requirements.
+- **High-Performance Compositor**: Powered by a Rust / WebAssembly media engine for frame-accurate playback, trimming, splitting, and previewing.
+- **Calm, Distraction-Free UI**: Crafted using Notion-inspired design tokens for an intuitive, clutter-free workspace.
+
+---
+
+## Overview
+
+Traditional mathematical animation workflows often require juggling terminal commands, waiting for full re-renders, and splicing clips in external video editing software.
+
+Manimly integrates the entire cycle into a single canvas:
+
+1. **Describe or Pick**: Enter a prompt or select a curated mathematical concept.
+2. **Inspect & Tweak**: Review generated Python code, adjust parameters, or apply iterative refinement.
+3. **Sequence & Compose**: Arrange clips, apply transitions, layer voiceover and audio tracks, and trim with precision on the timeline.
+4. **Export**: Export high-resolution renders ready for sharing, teaching, or video production.
+
+---
 
 ## Project Structure
 
-- `apps/web/`: Next.js web application
-- `apps/desktop/`: Native desktop app built with GPUI (in progress)
-- `rust/`: Platform-agnostic core: GPU compositor, effects, masks, and WASM bindings. We're actively migrating business logic here from TypeScript.
-- `docs/`: Architecture and subsystem documentation
+```
+Manimly/
+├── apps/
+│   └── web/                # Next.js 16 web application & editor studio
+├── rust/                   # Core media compositor and WASM bindings
+├── projects/               # Local project persistence (.json files)
+├── docs/                   # Architectural notes and technical guides
+└── package.json            # Monorepo configuration (pnpm workspace)
+```
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Bun](https://bun.sh/docs/installation)
-- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js](https://nodejs.org/) (v20 or newer)
+- [pnpm](https://pnpm.io/) (v9 or v11 recommended)
+- [Python](https://www.python.org/) 3.10+ with [Manim Community](https://www.manim.community/) (for local rendering)
 
-> **Note:** Docker is optional but recommended for running the local database and Redis. If you only want to work on frontend features, you can skip it.
+### Installation
 
-### Setup
-
-1. Fork and clone the repository
-
-2. Copy the environment file:
+1. **Clone the repository:**
 
    ```bash
-   # Unix/Linux/Mac
+   git clone https://github.com/shubhamrawat-gh/Manimly.git
+   cd Manimly
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Configure environment:**
+
+   ```bash
+   # Copy the example environment configuration
    cp apps/web/.env.example apps/web/.env.local
-
-   # Windows PowerShell
-   Copy-Item apps/web/.env.example apps/web/.env.local
    ```
 
-3. Start the database and Redis:
+4. **Start the web studio:**
 
    ```bash
-   docker compose up -d db redis serverless-redis-http
+   pnpm dev:web
    ```
 
-4. Install dependencies and start the dev server:
-
-   ```bash
-   bun install
-   bun dev:web
-   ```
-
-The application will be available at [http://localhost:3000](http://localhost:3000).
-
-The `.env.example` has sensible defaults that match the Docker Compose config — it should work out of the box.
-
-### Desktop setup
-
-Desktop is opt-in. If you're only working on the web app, skip this entirely.
-
-If you want to get ready for `apps/desktop`, see [`apps/desktop/README.md`](apps/desktop/README.md). It's a two-step setup: Rust toolchain first, then desktop native dependencies.
-
-### Local WASM development
-
-Only needed if you're editing `rust/wasm` and want the web app to use your local build instead of the published package.
-
-**Prerequisites** — install these once before anything else:
-
-```bash
-# Rust toolchain
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# build the WASM package
-cargo install wasm-pack
-
-# reruns the build on file changes, used by bun dev:wasm
-cargo install cargo-watch
-```
-
-1. Build the package once from the repo root:
-
-   ```bash
-   bun run build:wasm
-   ```
-
-2. Register the generated package for linking:
-
-   ```bash
-   cd rust/wasm/pkg
-   bun link
-   ```
-
-3. Link `apps/web` to the local package:
-
-   ```bash
-   cd apps/web
-   bun link opencut-wasm
-   ```
-
-4. Rebuild on changes while you work:
-
-   ```bash
-   bun dev:wasm
-   ```
-
-To switch `apps/web` back to the published package, run:
-
-```bash
-cd apps/web
-bun add opencut-wasm
-```
-
-### Self-Hosting with Docker
-
-To run everything (including a production build of the app) in Docker:
-
-```bash
-docker compose up -d
-```
-
-The app will be available at [http://localhost:3100](http://localhost:3100).
-
-## Contributing
-
-We welcome contributions! While we're actively developing and refactoring certain areas, there are plenty of opportunities to contribute effectively.
-
-**🎯 Focus areas:** Timeline functionality, project management, performance, bug fixes, and UI improvements outside the preview panel.
-
-**⚠️ Avoid for now:** Preview panel enhancements (fonts, stickers, effects) and export functionality - we're refactoring these with a new binary rendering approach.
-
-See our [Contributing Guide](.github/CONTRIBUTING.md) for detailed setup instructions, development guidelines, and complete focus area guidance.
-
-**Quick start for contributors:**
-
-- Fork the repo and clone locally
-- Follow the setup instructions in CONTRIBUTING.md
-- Working on `apps/desktop`? See [`apps/desktop/README.md`](apps/desktop/README.md) for setup
-- Create a feature branch and submit a PR
-
-## License
-
-[MIT LICENSE](LICENSE)
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to launch the editor.
 
 ---
 
-![Star History Chart](https://api.star-history.com/svg?repos=opencut-app/opencut&type=Date)
+## Architecture & Technology
 
+- **Frontend Studio**: Built with Next.js 16 (Turbopack), React 19, and Tailwind CSS.
+- **Editor State**: Zustand stores managing timeline tracks, playhead position, clip selection, and toolbars.
+- **Media Engine**: Rust-compiled WebAssembly (`opencut-wasm`) handling frame-accurate media composition.
+- **Local Storage**: Filesystem project storage via `/api/projects` with resilient IndexedDB browser caching.
+
+---
+
+## Initial Release Notes
+
+This is the initial release of Manimly. The foundational frontend studio, interactive timeline, Manim clip data models, asset creation panels, and local persistence layer are active.
+
+Contributions, feedback, and issue reports are welcome as the platform evolves!
+
+---
+
+## Contributing
+
+We welcome contributions from educators, animators, and developers.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+This project is open-source software licensed under the [MIT License](LICENSE).
+
+---
+
+## Acknowledgments
+
+- [Manim Community](https://www.manim.community/) for the animation engine powering mathematical visualizations.
+- OpenCut for timeline and media compositor foundations.

@@ -35,7 +35,7 @@ interface BaseTrack {
 
 export interface VideoTrack extends BaseTrack {
 	type: "video";
-	elements: (VideoElement | ImageElement)[];
+	elements: (VideoElement | ImageElement | ManimClip)[];
 	muted: boolean;
 	hidden: boolean;
 }
@@ -161,6 +161,29 @@ export interface EffectElement extends BaseTimelineElement {
 	effectType: string;
 }
 
+export interface ManimEditHistoryEntry {
+	timestamp: Date;
+	prompt?: string;
+	instruction?: string;
+	code: string;
+	codeHash: string;
+}
+
+export interface ManimClip extends BaseTimelineElement {
+	type: "manim";
+	prompt: string;
+	generatedCode: string;
+	codeHash: string;
+	quality: "draft" | "final";
+	renderStatus: "idle" | "pending" | "rendering" | "completed" | "failed";
+	videoAssetRef?: string;
+	createdAt: Date;
+	editHistory: ManimEditHistoryEntry[];
+	hidden?: boolean;
+	effects?: Effect[];
+	masks?: Mask[];
+}
+
 export type ElementUpdatePatch = { params?: Partial<ParamValues> };
 
 export type TimelineElement =
@@ -170,7 +193,8 @@ export type TimelineElement =
 	| TextElement
 	| StickerElement
 	| GraphicElement
-	| EffectElement;
+	| EffectElement
+	| ManimClip;
 
 export type ElementType = TimelineElement["type"];
 
@@ -178,7 +202,7 @@ function elementTypes<T extends ElementType[]>(...types: T): T {
 	return types;
 }
 
-export const MASKABLE_ELEMENT_TYPES = elementTypes("video", "image", "graphic");
+export const MASKABLE_ELEMENT_TYPES = elementTypes("video", "image", "graphic", "manim");
 
 export type MaskableElement = Extract<
 	TimelineElement,
@@ -198,6 +222,7 @@ export const VISUAL_ELEMENT_TYPES = elementTypes(
 	"text",
 	"sticker",
 	"graphic",
+	"manim",
 );
 
 export type VisualElement = Extract<
@@ -216,6 +241,7 @@ export type CreateTextElement = Omit<TextElement, "id">;
 export type CreateStickerElement = Omit<StickerElement, "id">;
 export type CreateGraphicElement = Omit<GraphicElement, "id">;
 export type CreateEffectElement = Omit<EffectElement, "id">;
+export type CreateManimClip = Omit<ManimClip, "id">;
 export type CreateTimelineElement =
 	| CreateAudioElement
 	| CreateVideoElement
@@ -223,7 +249,8 @@ export type CreateTimelineElement =
 	| CreateTextElement
 	| CreateStickerElement
 	| CreateGraphicElement
-	| CreateEffectElement;
+	| CreateEffectElement
+	| CreateManimClip;
 
 export interface ElementDragState {
 	isDragging: boolean;

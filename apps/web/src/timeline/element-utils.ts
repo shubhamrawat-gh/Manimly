@@ -11,6 +11,8 @@ import {
 	type CreateStickerElement,
 	type CreateUploadAudioElement,
 	type CreateLibraryAudioElement,
+	type CreateManimClip,
+	type ManimEditHistoryEntry,
 	type TextElement,
 	type SceneTracks,
 	type TimelineElement,
@@ -406,4 +408,47 @@ export function getElementFontFamilies({
 		}
 	}
 	return [...families];
+}
+
+export function buildManimClip({
+	prompt,
+	generatedCode,
+	codeHash,
+	startTime,
+	duration,
+	name,
+	quality = "draft",
+	renderStatus = "idle",
+	videoAssetRef,
+	editHistory = [],
+}: {
+	prompt: string;
+	generatedCode: string;
+	codeHash: string;
+	startTime: MediaTime;
+	duration?: MediaTime;
+	name?: string;
+	quality?: "draft" | "final";
+	renderStatus?: "idle" | "pending" | "rendering" | "completed" | "failed";
+	videoAssetRef?: string;
+	editHistory?: ManimEditHistoryEntry[];
+}): CreateManimClip {
+	return {
+		type: "manim",
+		name: name ?? (prompt ? `Manim: ${prompt.slice(0, 30)}${prompt.length > 30 ? "..." : ""}` : "Manim Scene"),
+		prompt,
+		generatedCode,
+		codeHash,
+		quality,
+		renderStatus,
+		videoAssetRef,
+		createdAt: new Date(),
+		editHistory,
+		duration: duration ?? DEFAULT_NEW_ELEMENT_DURATION,
+		startTime,
+		trimStart: ZERO_MEDIA_TIME,
+		trimEnd: ZERO_MEDIA_TIME,
+		hidden: false,
+		params: buildDefaultElementParams({ type: "manim" }),
+	};
 }

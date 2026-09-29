@@ -31,20 +31,8 @@ export function Header() {
 
 	const links = [
 		{
-			label: "Roadmap",
-			href: "/roadmap",
-		},
-		{
-			label: "Contributors",
-			href: "/contributors",
-		},
-		{
-			label: "Sponsors",
-			href: "/sponsors",
-		},
-		{
-			label: "Blog",
-			href: "/blog",
+			label: "Projects",
+			href: "/projects",
 		},
 	];
 
@@ -57,7 +45,7 @@ export function Header() {
 							<Link href="/" className="flex items-center gap-3">
 								<Image
 									src={DEFAULT_LOGO_URL}
-									alt="OpenCut Logo"
+									alt="Manimly Logo"
 									className="invert dark:invert-0"
 									width={32}
 									height={32}
@@ -79,19 +67,13 @@ export function Header() {
 								onClick={() => {
 									const a = document.createElement("a");
 									a.href = DEFAULT_LOGO_URL;
-									a.download = "opencut-logo.svg";
+									a.download = "manimly-logo.svg";
 									a.click();
 								}}
 							>
 								<HugeiconsIcon icon={Download01Icon} />
 								Download SVG
 							</ContextMenuItem>
-							<Link href="/brand">
-								<ContextMenuItem>
-									<HugeiconsIcon icon={LinkSquare02Icon} />
-									Brand assets
-								</ContextMenuItem>
-							</Link>
 						</ContextMenuContent>
 					</ContextMenu>
 

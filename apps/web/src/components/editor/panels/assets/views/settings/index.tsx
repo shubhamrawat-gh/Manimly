@@ -19,6 +19,7 @@ import {
 	SectionTitle,
 } from "@/components/section";
 import { BackgroundContent } from "./background";
+import { ManimServiceStatusSection } from "./manim-service-status";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { NumberField } from "@/components/ui/number-field";
@@ -314,6 +315,7 @@ export function SettingsView() {
 							</div>
 						</SectionContent>
 					</Section>
+					<ManimServiceStatusSection />
 				</div>
 			)}
 			{view === "background" && <BackgroundContent />}

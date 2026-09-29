@@ -3,6 +3,7 @@ import { getProjectDurationFromScenes } from "@/timeline/scenes";
 import type { MediaAsset } from "@/media/types";
 import { IndexedDBAdapter } from "./indexeddb-adapter";
 import { OPFSAdapter } from "./opfs-adapter";
+import { type ProjectStore, FilesystemProjectStore } from "./project-store";
 import {
 	type StorageCapacityCheckResult,
 	StorageQuotaExceededError,
@@ -52,12 +53,12 @@ function normalizeBookmarks({ raw }: { raw: unknown }): Bookmark[] {
 }
 
 class StorageService {
-	private projectsAdapter: IndexedDBAdapter<SerializedProject>;
+	private projectsAdapter: ProjectStore;
 	private savedSoundsAdapter: IndexedDBAdapter<SavedSoundsData>;
 	private config: StorageConfig;
 	private migrationsPromise: Promise<void> | null = null;
 
-	constructor() {
+	constructor(projectStore?: ProjectStore) {
 		this.config = {
 			projectsDb: "video-editor-projects",
 			mediaDb: "video-editor-media",
@@ -65,17 +66,21 @@ class StorageService {
 			version: 1,
 		};
 
-		this.projectsAdapter = new IndexedDBAdapter<SerializedProject>({
-			dbName: this.config.projectsDb,
-			storeName: "projects",
-			version: this.config.version,
-		});
+		this.projectsAdapter = projectStore ?? new FilesystemProjectStore();
 
 		this.savedSoundsAdapter = new IndexedDBAdapter<SavedSoundsData>({
 			dbName: this.config.savedSoundsDb,
 			storeName: "saved-sounds",
 			version: this.config.version,
 		});
+	}
+
+	setProjectStore(store: ProjectStore): void {
+		this.projectsAdapter = store;
+	}
+
+	getProjectStore(): ProjectStore {
+		return this.projectsAdapter;
 	}
 
 	private async ensureMigrations(): Promise<void> {

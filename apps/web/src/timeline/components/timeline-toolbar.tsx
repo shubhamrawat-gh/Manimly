@@ -43,7 +43,9 @@ import {
 	Layers01Icon,
 	Chart03Icon,
 	Unlink02Icon,
+	AiBrain05Icon,
 } from "@hugeicons/core-free-icons";
+import { useAssetsPanelStore } from "@/components/editor/panels/assets/assets-panel-store";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { OcRippleIcon } from "@/components/icons";
 import { GraphEditorPopover } from "./graph-editor/popover";
@@ -87,6 +89,7 @@ export function TimelineToolbar({
 
 function ToolbarLeftSection() {
 	const editor = useEditor();
+	const { setActiveTab } = useAssetsPanelStore();
 	const mediaAssets = useEditor((currentEditor) =>
 		currentEditor.media.getAssets(),
 	);
@@ -199,6 +202,15 @@ function ToolbarLeftSection() {
 				/>
 
 				<div className="bg-border mx-1 h-6 w-px" />
+
+				<ToolbarButton
+					icon={<HugeiconsIcon icon={AiBrain05Icon} className="text-primary" />}
+					tooltip="Create Manim Scene (AI)"
+					onClick={({ event }) => {
+						event.stopPropagation();
+						setActiveTab("manim");
+					}}
+				/>
 
 				<Tooltip>
 					<ToolbarButton

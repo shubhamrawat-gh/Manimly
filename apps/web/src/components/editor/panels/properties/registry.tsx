@@ -11,6 +11,7 @@ import type {
 	VideoElement,
 	AudioElement,
 	TimelineElement,
+	ManimClip,
 } from "@/timeline";
 import type { MediaAsset } from "@/media/types";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -21,12 +22,14 @@ import {
 	MusicNote03Icon,
 	MagicWand05Icon,
 	DashboardSpeed02Icon,
+	AiBrain05Icon,
 } from "@hugeicons/core-free-icons";
 import { ElementParamsTab } from "./components/element-params-tab";
 import { ClipEffectsTab, StandaloneEffectTab } from "@/effects/components/effects-tab";
 import { MasksTab } from "@/masks/components/masks-tab";
 import { SpeedTab } from "@/speed/components/speed-tab";
 import { GraphicTab } from "@/graphics/components/graphic-tab";
+import { ManimPropertiesTab } from "./components/manim-tab";
 import { OcShapesIcon } from "@/components/icons";
 
 const TRANSFORM_PARAM_KEYS = [
@@ -326,6 +329,38 @@ function getEffectConfig({
 	};
 }
 
+function buildManimTab({
+	element,
+}: {
+	element: ManimClip;
+}): PropertiesTabDef {
+	return {
+		id: "manim",
+		label: "Manim AI",
+		icon: <HugeiconsIcon icon={AiBrain05Icon} size={16} />,
+		content: ({ trackId }) => (
+			<ManimPropertiesTab element={element} trackId={trackId} />
+		),
+	};
+}
+
+function getManimConfig({
+	element,
+}: {
+	element: ManimClip;
+}): ElementPropertiesConfig {
+	return {
+		defaultTab: "manim",
+		tabs: [
+			buildManimTab({ element }),
+			buildTransformTab({ element }),
+			buildBlendingTab({ element }),
+			buildMasksTab({ element }),
+			buildClipEffectsTab({ element }),
+		],
+	};
+}
+
 export function getPropertiesConfig({
 	element,
 	mediaAssets,
@@ -350,5 +385,7 @@ export function getPropertiesConfig({
 			return getAudioConfig({ element });
 		case "effect":
 			return getEffectConfig({ element });
+		case "manim":
+			return getManimConfig({ element });
 	}
 }
