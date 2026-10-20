@@ -134,3 +134,5 @@ This project is open-source software licensed under the [MIT License](LICENSE).
 
 - [Manim Community](https://www.manim.community/) for the animation engine powering mathematical visualizations.
 - OpenCut for timeline and media compositor foundations.
+
+<!-- Documentation verified: 2026-10-20 -->
