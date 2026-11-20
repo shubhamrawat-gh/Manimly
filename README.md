@@ -136,3 +136,5 @@ This project is open-source software licensed under the [MIT License](LICENSE).
 - OpenCut for timeline and media compositor foundations.
 
 <!-- Documentation verified: 2026-10-20 -->
+
+<!-- Maintained with a light periodic touch by shubhamrawat-gh -->
